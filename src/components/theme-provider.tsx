@@ -2,22 +2,23 @@
 
 import * as React from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
-
-type Attribute = 'class' | 'data-theme' | 'data-mode';
-
-interface ThemeProviderProps {
-  children: React.ReactNode;
-  attribute?: Attribute | Attribute[];
-  defaultTheme?: string;
-  enableSystem?: boolean;
-  disableTransitionOnChange?: boolean;
-}
+import type { ThemeProviderProps } from '@/types/ui';
 
 export function ThemeProvider({
   children,
+  defaultTheme = 'system',
+  storageKey = 'vite-ui-theme',
+  attribute = 'class',
   ...props
 }: ThemeProviderProps) {
   return (
-    <NextThemesProvider {...props}>{children}</NextThemesProvider>
+    <NextThemesProvider
+      defaultTheme={defaultTheme}
+      storageKey={storageKey}
+      attribute={attribute}
+      {...props}
+    >
+      {children}
+    </NextThemesProvider>
   );
 }

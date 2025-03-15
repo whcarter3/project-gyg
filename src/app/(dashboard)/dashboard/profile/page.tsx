@@ -7,13 +7,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { db } from '@/lib/supabase/db';
 import { createProfile } from '@/app/actions/create-profile';
 import { updateProfile } from '@/app/actions/update-profile';
-
-interface Profile {
-  id: string;
-  full_name: string | null;
-  avatar_url: string | null;
-  updated_at: string;
-}
+import type { Profile } from '@/types/database';
 
 export default function ProfilePage() {
   const { user, isLoading: authLoading } = useAuth();

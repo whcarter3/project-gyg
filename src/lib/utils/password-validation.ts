@@ -1,52 +1,27 @@
-export interface PasswordValidation {
-  isValid: boolean;
-  errors: string[];
-  requirements: {
-    minLength: boolean;
-    hasUppercase: boolean;
-    hasLowercase: boolean;
-    hasNumber: boolean;
-    hasSpecialChar: boolean;
-  };
-}
+import type { PasswordValidation } from '@/types/ui';
 
 export function validatePassword(
   password: string
 ): PasswordValidation {
-  const errors: string[] = [];
-  const requirements = {
-    minLength: password.length >= 8,
-    hasUppercase: /[A-Z]/.test(password),
-    hasLowercase: /[a-z]/.test(password),
-    hasNumber: /\d/.test(password),
-    hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-  };
+  const hasMinLength = password.length >= 8;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasLowercase = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-  if (!requirements.minLength) {
-    errors.push('Password must be at least 8 characters long');
-  }
-  if (!requirements.hasUppercase) {
-    errors.push(
-      'Password must contain at least one uppercase letter'
-    );
-  }
-  if (!requirements.hasLowercase) {
-    errors.push(
-      'Password must contain at least one lowercase letter'
-    );
-  }
-  if (!requirements.hasNumber) {
-    errors.push('Password must contain at least one number');
-  }
-  if (!requirements.hasSpecialChar) {
-    errors.push(
-      'Password must contain at least one special character'
-    );
-  }
+  const isValid =
+    hasMinLength &&
+    hasUppercase &&
+    hasLowercase &&
+    hasNumber &&
+    hasSpecialChar;
 
   return {
-    isValid: errors.length === 0,
-    errors,
-    requirements,
+    isValid,
+    hasMinLength,
+    hasUppercase,
+    hasLowercase,
+    hasNumber,
+    hasSpecialChar,
   };
 }
