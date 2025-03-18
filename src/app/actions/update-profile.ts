@@ -1,7 +1,5 @@
 'use server';
 
-export const runtime = 'edge';
-
 import { adminDb } from '@/lib/supabase/admin-db';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
@@ -17,19 +15,19 @@ export async function updateProfile(
 ): Promise<DatabaseResponse<Profile>> {
   try {
     // Create a Supabase client for auth
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
-          get(name) {
-            return cookieStore.get(name)?.value ?? '';
+          async get(name) {
+            return (await cookieStore.get(name))?.value ?? '';
           },
-          set(name, value) {
+          async set(name, value) {
             cookieStore.set(name, value);
           },
-          remove(name) {
+          async remove(name) {
             cookieStore.delete(name);
           },
         },

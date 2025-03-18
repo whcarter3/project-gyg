@@ -7,14 +7,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">
-          Dashboard
-        </h1>
-        <p className="text-muted-foreground">
-          Welcome back, {user?.email}
-        </p>
-      </div>
+      <p className="text-primary">Welcome back, {user?.email}</p>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg border bg-card p-6">
@@ -46,9 +39,7 @@ export default function DashboardPage() {
       <div className="rounded-lg border bg-card">
         <div className="p-6">
           <h2 className="text-xl font-semibold">Recent Activity</h2>
-          <p className="text-sm text-muted-foreground">
-            No recent activity
-          </p>
+          <p className="text-sm text-primary">No recent activity</p>
         </div>
       </div>
     </div>

@@ -2,10 +2,9 @@
 
 import { useAuth } from '@/lib/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { useRouter, usePathname } from 'next/navigation';
 import { Sidebar } from '@/components/dashboard/sidebar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function DashboardLayout({
   children,
@@ -14,6 +13,9 @@ export default function DashboardLayout({
 }) {
   const { user, isLoading, signOut } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const currentPage = pathname.split('/').pop() || 'dashboard';
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -30,27 +32,26 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="h-screen bg-background">
-      <header className="fixed top-0 w-full border-b z-50 bg-background">
-        <div className="flex h-16 items-center justify-between px-4">
-          <h1 className="text-2xl font-bold text-primary">GYG</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">
-              {user.email}
-            </span>
-            <Button variant="outline" onClick={() => signOut()}>
-              Sign out
-            </Button>
-          </div>
+    <div className="min-h-screen bg-background">
+      <div className="flex h-screen">
+        <Sidebar
+          user={user}
+          onSignOut={signOut}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(!isSidebarOpen)}
+        />
+        <div className="flex-1 flex flex-col lg:ml-72">
+          <header className="h-16 bg-white dark:bg-gray-800 px-6 flex items-center justify-between">
+            <h1 className="text-xl font-semibold text-foreground capitalize pl-12 lg:pl-0">
+              {currentPage}
+            </h1>
+          </header>
+          <main className="flex-1 p-6 overflow-auto">
+            <div className="container mx-auto px-6 py-8 max-w-7xl">
+              {children}
+            </div>
+          </main>
         </div>
-      </header>
-      <div className="flex pt-16 h-full">
-        <aside className="hidden md:flex w-72 shrink-0 border-r h-full">
-          <Sidebar />
-        </aside>
-        <main className="flex-1 overflow-y-auto">
-          <div className="container py-8">{children}</div>
-        </main>
       </div>
     </div>
   );

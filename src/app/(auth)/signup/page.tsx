@@ -18,12 +18,13 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [fullName, setFullName] = useState('');
   const router = useRouter();
 
   const passwordValidation = validatePassword(password);
   const passwordsMatch = password === confirmPassword;
   const canSubmit =
-    passwordValidation.isValid && passwordsMatch && email;
+    passwordValidation.isValid && passwordsMatch && email && fullName;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +38,7 @@ export default function SignUpPage() {
     }
 
     try {
-      const { error } = await signUp(email, password);
+      const { error } = await signUp(email, password, fullName);
       if (error) throw error;
 
       // If signup was successful, redirect to verification page
@@ -62,7 +63,7 @@ export default function SignUpPage() {
             Create an account
           </h1>
           <p className="text-sm text-muted-foreground">
-            Enter your email below to create your account
+            Enter your details below to create your account
           </p>
         </div>
 
@@ -72,6 +73,24 @@ export default function SignUpPage() {
               {error}
             </div>
           )}
+
+          <div className="space-y-2">
+            <label
+              htmlFor="fullName"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Full Name
+            </label>
+            <input
+              id="fullName"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              required
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              placeholder="Enter your full name"
+            />
+          </div>
 
           <div className="space-y-2">
             <label

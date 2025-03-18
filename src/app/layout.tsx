@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/providers';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,7 +25,10 @@ export default function RootLayout({
           inter.className
         )}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <ThemeToggle />
+        </Providers>
       </body>
     </html>
   );
