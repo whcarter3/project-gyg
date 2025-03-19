@@ -55,18 +55,18 @@ export async function createProfile(userId: string) {
     } = await supabase.auth.getUser();
     if (!user) throw new Error('User not found');
 
-    // Get the user's name from either user metadata or Google profile
-    let fullName = user.user_metadata.full_name;
+    // Get the user's display name from metadata
+    let displayName = user.user_metadata.display_name;
 
-    // If no full_name in metadata but this is a Google user, use their name
-    if (!fullName && user.app_metadata.provider === 'google') {
-      fullName = user.user_metadata.name;
+    // If no display name and this is a Google user, use their email (without @ and domain)
+    if (!displayName && user.app_metadata.provider === 'google') {
+      displayName = user.email?.split('@')[0] || null;
     }
 
     // Get avatar URL from Google profile or generate a default one
     let avatarUrl = user.user_metadata.avatar_url;
-    if (!avatarUrl && fullName) {
-      avatarUrl = getDefaultAvatarUrl(fullName);
+    if (!avatarUrl && displayName) {
+      avatarUrl = getDefaultAvatarUrl(displayName);
     }
 
     // First try to upsert
@@ -75,7 +75,6 @@ export async function createProfile(userId: string) {
       .upsert(
         {
           id: userId,
-          full_name: fullName || null,
           avatar_url: avatarUrl || null,
           updated_at: new Date().toISOString(),
         },

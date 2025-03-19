@@ -5,36 +5,19 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
   User as UserIcon,
-  LogOut,
   Trophy,
   Users,
   Menu,
   X,
 } from 'lucide-react';
-import type { User } from '@supabase/supabase-js';
-import type { AuthError } from '@supabase/supabase-js';
 
 interface SidebarProps {
-  user: User;
-  onSignOut: () => Promise<{ error: AuthError | null }>;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function Sidebar({
-  user,
-  onSignOut,
-  isOpen,
-  onClose,
-}: SidebarProps) {
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
-
-  const handleSignOut = async () => {
-    const result = await onSignOut();
-    if (result.error) {
-      console.error('Error signing out:', result.error);
-    }
-  };
 
   return (
     <>
@@ -135,19 +118,6 @@ export function Sidebar({
             </li>
           </ul>
         </nav>
-        <div className="p-4 border-t border-white/10">
-          <div className="flex items-center space-x-3 px-4 py-2 text-primary-foreground">
-            <UserIcon className="h-5 w-5" />
-            <span className="text-sm">{user.email}</span>
-          </div>
-          <button
-            onClick={handleSignOut}
-            className="w-full flex items-center space-x-3 px-4 py-2 text-primary-foreground hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <LogOut className="h-5 w-5" />
-            <span>Sign out</span>
-          </button>
-        </div>
       </aside>
     </>
   );

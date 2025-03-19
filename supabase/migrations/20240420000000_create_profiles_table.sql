@@ -8,7 +8,6 @@ BEGIN
     IF NOT EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = 'profiles') THEN
         CREATE TABLE public.profiles (
             id uuid NOT NULL REFERENCES auth.users ON DELETE CASCADE,
-            full_name text,
             avatar_url text,
             updated_at timestamptz DEFAULT now(),
             PRIMARY KEY (id)
